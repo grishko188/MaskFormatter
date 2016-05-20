@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MaskFormatter</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_1">Enter your Mask</string>
+    <string name="input_1_hint">### ### ###</string>
+    <string name="title_2">Enter any text</string>
+    <string name="format_btn">Format</string>
+    <string name="formatted_label">Formatted text: %s</string>
+    <string name="clean_label">Clean text: %s</string>
+    <string name="confirm">Confirm mask</string>
+</resources>
