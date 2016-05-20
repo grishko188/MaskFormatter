@@ -26,6 +26,7 @@ mTextInput.addTextChangedListener(new MaskTextWatcher("#### #### #### ####"));
 <br/><br/>
 Known issues:
 <ul>
-<li>Do not use the mask type ####z ( any letter or number after replacement sequence without space after last replacement char)</li>
+<li>Do not use the mask type ####z ( any letter or number after replacement sequence without space after last replacement char)
+ If you need to format and clear such mask, use <b>MaskFormatter#clearStatic(String)</b> instead, but only for formatting static text(not allowed for user input formatting).</li>
 <li>Do not use the mask type #### #### #### z ( any characters after replacement sequence in the end of mask) with EditText formatting(you will have troubles with removing), but works fine for static formatting</li>
 </ul>
