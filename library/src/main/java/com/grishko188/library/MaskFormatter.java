@@ -32,6 +32,7 @@ public class MaskFormatter {
     private String mMask;
     private char mReplacementChar;
     private Pattern mRegex;
+    private String[] mIgnorePrefix = null;
 
     private static final MaskFormatter instance = new MaskFormatter();
 
@@ -67,6 +68,22 @@ public class MaskFormatter {
 
     public char getReplacementChar() {
         return mReplacementChar;
+    }
+
+    /**
+     * Set an array of possible prefixes, which should be ignored while formatting. Generally created for phone formatter, to ignore country code or etc.
+     * <pre>
+     * {@code
+     * MaskFormatter formatter = MaskFormatter.get().mask("+7 (###) ###-##-##")
+     *                                          .ignorePrefix("+7", "7","8");
+     *     assertEquals("+7 (930) 792-00-00", formatter.format(79307920000));
+     * }
+     * </pre>
+     */
+
+    public MaskFormatter ignorePrefix(String... prefix) {
+        this.mIgnorePrefix = prefix;
+        return this;
     }
 
     /**
@@ -170,6 +187,15 @@ public class MaskFormatter {
 
         if (TextUtils.isEmpty(source))
             return source;
+
+        if (mIgnorePrefix != null && mIgnorePrefix.length > 0) {
+            for (String prefixToCheck : mIgnorePrefix) {
+                if (source.startsWith(prefixToCheck)) {
+                    source = source.replaceFirst(prefixToCheck, "");
+                    break;
+                }
+            }
+        }
 
         String fixedSource = escapeIncorrectSymbols(source);
         int indexInSource = 0;

@@ -4,6 +4,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
 
 /**
  * Watches a {@link android.widget.TextView} and format input with the given mask and replacement char.
@@ -29,7 +30,12 @@ public class MaskTextWatcher implements TextWatcher {
     private MaskFormatter mFormatter;
 
     private boolean mSelfChange;
+
     public static final MaskInputFilter ALLOWED_CHARS_FILTER = new MaskInputFilter();
+
+    public MaskTextWatcher(MaskFormatter formatter) {
+        this.mFormatter = formatter;
+    }
 
     public MaskTextWatcher(String mask) {
         initFormatter(mask, MaskFormatter.EMPTY);

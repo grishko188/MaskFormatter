@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class MainPagerAdapter extends FragmentStatePagerAdapter {
 
-        public MainPagerAdapter() {
+        MainPagerAdapter() {
             super(getSupportFragmentManager());
         }
 
@@ -44,13 +44,15 @@ public class MainActivity extends AppCompatActivity {
                     return StaticFormattingFragment.getInstance();
                 case 1:
                     return DynamicFormattingFragment.getInstance();
+                case 2:
+                    return PhoneFormattingFragment.getInstance();
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
                     return "Static";
                 case 1:
                     return "Dynamic";
+                case 2:
+                    return "Phone";
                 default:
                     return null;
             }
