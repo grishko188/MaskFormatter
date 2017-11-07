@@ -28,9 +28,45 @@ public class MaskFormatterTest {
     }
 
     @Test
-    public void test_ExtendedPhoneFormat() {
+    public void test_IgnoreInputPrefixes() {
         MaskFormatter formatter = MaskFormatter.get().mask("+7 (###) ###-##-##")
-                .ignorePrefix("+7", "7");
+                .ignoreInputPrefixes("+7", "7");
         assertEquals("+7 (930) 792-00-00", formatter.format(FULL_PHONE));
+    }
+
+    @Test
+    public void test_maskPrefix() {
+        MaskFormatter formatter = MaskFormatter.get().mask("(###) ###-##-##")
+                .ignoreInputPrefixes("+7", "7")
+                .maskPrefix("+7 ");
+        assertEquals("+7 (930) 792-00-00", formatter.format(FULL_PHONE));
+    }
+
+    @Test
+    public void test_maskPrefixWithDifferentNumbers() {
+        MaskFormatter formatter = MaskFormatter.get().mask("(###) ###-##-##")
+                .ignoreInputPrefixes("+7", "7", "+7 ", "7 ", "8")
+                .maskPrefix("+7 ");
+
+        assertEquals("+7 (930) 792-00-00", formatter.format(FULL_PHONE));
+        assertEquals("+7 (930) 792-00-00", formatter.format("9307920000"));
+        assertEquals("+7 (930) 792-00-00", formatter.format("+79307920000"));
+        assertEquals("+7 (930) 792-00-00", formatter.format("79307920000"));
+        assertEquals("+7 (930) 792-00-00", formatter.format("+9307920000"));
+        assertEquals("+7 (930) 792-00-00", formatter.format("7(930)7920000"));
+        assertEquals("+7 (930) 792-00-00", formatter.format("7 930 792 00 00"));
+        assertEquals("+7 (930) 792-00-00", formatter.format("89307920000"));
+    }
+
+    @Test
+    public void test_maskPrefixWithClear() {
+        MaskFormatter formatter = MaskFormatter.get().mask("(###) ###-##-##")
+                .ignoreInputPrefixes("+7", "7")
+                .maskPrefix("+7 ");
+
+        String formatted = formatter.format(FULL_PHONE);
+
+        assertEquals("9307920000", formatter.clear(formatted));
+        assertEquals("9307920000", formatter.clearStatic(formatted));
     }
 }

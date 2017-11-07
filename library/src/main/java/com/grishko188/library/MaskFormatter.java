@@ -1,5 +1,6 @@
 package com.grishko188.library;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.util.Arrays;
@@ -33,6 +34,7 @@ public class MaskFormatter {
     private char mReplacementChar;
     private Pattern mRegex;
     private String[] mIgnorePrefix = null;
+    private String mMaskPrefix;
 
     private static final MaskFormatter instance = new MaskFormatter();
 
@@ -62,6 +64,11 @@ public class MaskFormatter {
         return this;
     }
 
+    public MaskFormatter maskPrefix(String prefix) {
+        this.mMaskPrefix = prefix;
+        return this;
+    }
+
     public String getMask() {
         return this.mMask;
     }
@@ -75,13 +82,13 @@ public class MaskFormatter {
      * <pre>
      * {@code
      * MaskFormatter formatter = MaskFormatter.get().mask("+7 (###) ###-##-##")
-     *                                          .ignorePrefix("+7", "7","8");
+     *                                          .ignoreInputPrefixes("+7", "7","8");
      *     assertEquals("+7 (930) 792-00-00", formatter.format(79307920000));
      * }
      * </pre>
      */
 
-    public MaskFormatter ignorePrefix(String... prefix) {
+    public MaskFormatter ignoreInputPrefixes(String... prefix) {
         this.mIgnorePrefix = prefix;
         return this;
     }
@@ -116,6 +123,10 @@ public class MaskFormatter {
         if (TextUtils.isEmpty(source))
             return source;
 
+        if (mMaskPrefix != null) {
+            source = clearPrefixIfExist(source, mMaskPrefix);
+        }
+
         Matcher matcher = getRegexPattern().matcher(source);
 
         if (!matcher.matches()) {
@@ -148,6 +159,10 @@ public class MaskFormatter {
 
         if (TextUtils.isEmpty(source))
             return source;
+
+        if (mMaskPrefix != null) {
+            source = clearPrefixIfExist(source, mMaskPrefix);
+        }
 
         Matcher matcher = getRegexPattern().matcher(source);
 
@@ -191,7 +206,7 @@ public class MaskFormatter {
         if (mIgnorePrefix != null && mIgnorePrefix.length > 0) {
             for (String prefixToCheck : mIgnorePrefix) {
                 if (source.startsWith(prefixToCheck)) {
-                    source = source.replaceFirst(prefixToCheck, "");
+                    source = clearPrefix(source, prefixToCheck);
                     break;
                 }
             }
@@ -234,9 +249,33 @@ public class MaskFormatter {
                 result[i] = mask[i];
             }
         }
-        return String.valueOf(trimEmptyElements(result));
+        String resultString = String.valueOf(trimEmptyElements(result));
+
+        if (mMaskPrefix != null && !resultString.startsWith(mMaskPrefix) && !mMask.startsWith(mMaskPrefix)) {
+            resultString = mMaskPrefix + resultString;
+        }
+
+        return resultString;
     }
 
+    private String clearPrefix(@NonNull String source, @NonNull String prefix) {
+        int indexOf = source.indexOf(prefix);
+        if (indexOf != -1) {
+            source = source.substring(indexOf + prefix.length(), source.length());
+        }
+        return source;
+    }
+
+    private String clearPrefixIfExist(@NonNull String source, @NonNull String prefix) {
+
+        if (source.length() < prefix.length() && prefix.startsWith(source))
+            return "";
+
+        if (source.startsWith(prefix)) {
+            source = clearPrefix(source, prefix);
+        }
+        return source;
+    }
 
     /**
      * Build RegExp based on mask

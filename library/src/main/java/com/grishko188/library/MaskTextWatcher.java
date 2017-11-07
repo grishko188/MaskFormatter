@@ -4,7 +4,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.util.Log;
 
 /**
  * Watches a {@link android.widget.TextView} and format input with the given mask and replacement char.
