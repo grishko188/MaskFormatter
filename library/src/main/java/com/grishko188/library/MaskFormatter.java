@@ -35,6 +35,8 @@ public class MaskFormatter {
     private Pattern mRegex;
     private String[] mIgnorePrefix = null;
     private String mMaskPrefix;
+    private boolean mIsMaskStrict = true;
+    private int mMaskAvailableCharsCount;
 
     private static final MaskFormatter instance = new MaskFormatter();
 
@@ -64,8 +66,21 @@ public class MaskFormatter {
         return this;
     }
 
+
+    /**
+     * Set the given string as mask prefix, to build complicated mask. Output will be look like this scheme
+     * <br/> (mask_prefix)+(result of formatting)
+     */
     public MaskFormatter maskPrefix(String prefix) {
         this.mMaskPrefix = prefix;
+        return this;
+    }
+
+    /**
+     * Change mask strict mode. If strict set to false and input string length is bigger then available replacement chars in mask, formatting will not be applied
+     */
+    public MaskFormatter strictMask(boolean isStrict) {
+        this.mIsMaskStrict = isStrict;
         return this;
     }
 
@@ -201,6 +216,9 @@ public class MaskFormatter {
             mReplacementChar = findMostPopularChar();
 
         if (TextUtils.isEmpty(source))
+            return source;
+
+        if (source.length() > mMaskAvailableCharsCount && !mIsMaskStrict)
             return source;
 
         if (mIgnorePrefix != null && mIgnorePrefix.length > 0) {
@@ -358,6 +376,7 @@ public class MaskFormatter {
             if (entry.getValue().get() > biggestCounter) {
                 biggestCounter = entry.getValue().get();
                 mostPopularChar = entry.getKey();
+                mMaskAvailableCharsCount = biggestCounter;
             }
         }
         return mostPopularChar;

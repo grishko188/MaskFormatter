@@ -69,4 +69,22 @@ public class MaskFormatterTest {
         assertEquals("9307920000", formatter.clear(formatted));
         assertEquals("9307920000", formatter.clearStatic(formatted));
     }
+
+    @Test
+    public void test_maskStrictMode() {
+        String input = "1234567890";
+
+        MaskFormatter formatter = MaskFormatter.get().mask("## ## ####");
+
+        formatter.strictMask(true);
+
+        String formatted = formatter.format(input);
+
+        assertEquals("12 34 5678", formatted);
+
+        formatter.strictMask(false);
+        String formattedNonStrict = formatter.format(input);
+
+        assertEquals(input, formattedNonStrict);
+    }
 }
