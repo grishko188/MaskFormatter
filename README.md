@@ -1,6 +1,16 @@
 # MaskFormatter
 Formatter library that provides the ability to format the text for any arbitrarily given mask,
 and to clean the filter.
+<br/>
+<br/>
+<b>Version 1.1.0 (What's new)</b>
+<ul>
+<li>Add method ```ignoreInputPrefixes(String... prefixes)```. Created to avoid duplicate characters if yout input starts with the same prefix just like the mask</li>
+<li>Add method ```maskPrefix(String prefix)```. Created to build complicated mask like PHONE_COUNTRY_CODE + PHONE_FORMAT. For example maskPrefix +3 80 , and mask format (###) ###-##-##. It gives you more flexibility for building complicated formats.  </li>
+<li>Add method ```strictMask(boolean isStict)```. Created to make mask non-strict. For example your prefer some mask like ## ## ####. But if yout input is longer then mask - formatting will be cleared.</li>
+</ul>
+<br/>
+<br/>
 <br/>Contains to classes <b>MaskFormatter</b> and <b>MaskTextWatcher</b>
 <br/>
 <br/>
