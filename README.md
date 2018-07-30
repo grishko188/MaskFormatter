@@ -1,6 +1,21 @@
 # MaskFormatter
 Formatter library that provides the ability to format the text for any arbitrarily given mask,
 and to clean the filter.
+##Getting Started
+To add MaskFormatter library to your project, add the following to your app module's ```build.gradlew```
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://www.jitpack.io' }
+		}
+}
+	
+dependencies {
+    	implementation 'com.github.grishko188:MaskFormatter:1.1.1'
+}
+```
+
 <br/>
 <br/>
 <b>Version 1.1.0 (What's new)</b>
