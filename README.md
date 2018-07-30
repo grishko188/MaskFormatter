@@ -2,7 +2,8 @@
 Formatter library that provides the ability to format the text for any arbitrarily given mask,
 and to clean the filter.
 
-##Getting Started
+Getting Started
+==============
 
 To add MaskFormatter library to your project, add the following to your app module's ```build.gradlew```
 ```
