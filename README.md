@@ -21,6 +21,17 @@ dependencies {
 
 <br/>
 <br/>
+<b>Version 1.1.2 (What's new)</b>
+<li>Add method 
+
+```useMaskPrefixNecessarily(boolean value)```. 
+
+Switch if mask prefix should be always in input.
+This parameter makes the mask prefix not removed from the input field.
+Generally designed to use with {@link MaskTextWatcher}
+By default this parameter is false.
+<br/>
+<br/>
 <b>Version 1.1.0 (What's new)</b>
 <ul>
 <li>Add method 
