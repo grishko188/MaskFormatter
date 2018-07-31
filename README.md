@@ -1,4 +1,4 @@
-# MaskFormatter
+# MaskFormatter [![](https://www.jitpack.io/v/grishko188/MaskFormatter.svg)](https://www.jitpack.io/#grishko188/MaskFormatter)
 Formatter library that provides the ability to format the text for any arbitrarily given mask,
 and to clean the filter.
 
