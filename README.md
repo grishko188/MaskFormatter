@@ -28,8 +28,12 @@ dependencies {
 
 Switch if mask prefix should be always in input.
 This parameter makes the mask prefix not removed from the input field.
-Generally designed to use with {@link MaskTextWatcher}
+Generally designed to use with  MaskTextWatcher.
 By default this parameter is false.
+To display prefix in EditText at the beginning add this line of code
+```
+mTextInput.setText("")
+```
 <br/>
 <br/>
 <b>Version 1.1.0 (What's new)</b>
