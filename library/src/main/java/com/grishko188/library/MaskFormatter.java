@@ -1,6 +1,7 @@
 package com.grishko188.library;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ import java.util.regex.Pattern;
  * *
  *
  * @author Grishko Nikita
- *         on 12.05.2016.
+ * on 12.05.2016.
  */
 public class MaskFormatter {
 
@@ -35,6 +36,7 @@ public class MaskFormatter {
     private Pattern mRegex;
     private String[] mIgnorePrefix = null;
     private String mMaskPrefix;
+    private boolean mPrefixNecessarily = false;
     private boolean mIsMaskStrict = true;
     private int mMaskAvailableCharsCount;
 
@@ -77,6 +79,17 @@ public class MaskFormatter {
     }
 
     /**
+     * Switch if mask prefix should be always in input.
+     * This parameter makes the mask prefix not removed from the input field.
+     * Generally designed to use with {@link MaskTextWatcher}
+     * By default this parameter is false.
+     */
+    public MaskFormatter useMaskPrefixNecessarily(boolean value) {
+        this.mPrefixNecessarily = value;
+        return this;
+    }
+
+    /**
      * Change mask strict mode. If strict set to false and input string length is bigger then available replacement chars in mask, formatting will not be applied
      */
     public MaskFormatter strictMask(boolean isStrict) {
@@ -93,7 +106,8 @@ public class MaskFormatter {
     }
 
     /**
-     * Set an array of possible prefixes, which should be ignored while formatting. Generally created for phone formatter, to ignore country code or etc.
+     * Set an array of possible prefixes, which should be ignored while formatting.
+     * Generally designed for phone formatter, to ignore country code or etc.
      * <pre>
      * {@code
      * MaskFormatter formatter = MaskFormatter.get().mask("+7 (###) ###-##-##")
@@ -102,7 +116,6 @@ public class MaskFormatter {
      * }
      * </pre>
      */
-
     public MaskFormatter ignoreInputPrefixes(String... prefix) {
         this.mIgnorePrefix = prefix;
         return this;
@@ -216,7 +229,7 @@ public class MaskFormatter {
             mReplacementChar = findMostPopularChar();
 
         if (TextUtils.isEmpty(source))
-            return source;
+            return mPrefixNecessarily ? mMaskPrefix : source;
 
         if (source.length() > mMaskAvailableCharsCount && !mIsMaskStrict)
             return source;
@@ -326,6 +339,9 @@ public class MaskFormatter {
         return mRegex;
     }
 
+    PrefixConfig getPrefixConfiguration() {
+        return new PrefixConfig(mMaskPrefix, mPrefixNecessarily);
+    }
 
     private char[] trimEmptyElements(char[] chars) {
         int notEmptyCharsCount = 0;
@@ -382,4 +398,23 @@ public class MaskFormatter {
         return mostPopularChar;
     }
 
+    class PrefixConfig {
+        @Nullable
+        private String prefix;
+        private Boolean isNecessarily;
+
+        PrefixConfig(@Nullable String prefix, Boolean isNecessarily) {
+            this.prefix = prefix;
+            this.isNecessarily = isNecessarily;
+        }
+
+        @Nullable
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public Boolean isNecessarily() {
+            return isNecessarily;
+        }
+    }
 }
